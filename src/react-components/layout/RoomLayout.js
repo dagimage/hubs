@@ -24,7 +24,8 @@ export function RoomLayout({
     <div className={classNames(styles.roomLayout, { [styles.objectFocused]: objectFocused }, className)} {...rest}>
       {sidebar && <div className={classNames(styles.sidebar, sidebarClassName)}>{sidebar}</div>}
       <div className={classNames(styles.modalContainer, styles.viewport)}>{modal}</div>
-      {(toolbarLeft || toolbarCenter || toolbarRight) && (
+      {false && // onBoard
+        (toolbarLeft || toolbarCenter || toolbarRight) && (
         <Toolbar
           className={classNames(styles.main, styles.toolbar, toolbarClassName)}
           left={toolbarLeft}

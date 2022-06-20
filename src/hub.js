@@ -253,6 +253,16 @@ import { SignInMessages } from "./react-components/auth/SignInModal";
 import { ThemeProvider } from "./react-components/styles/theme";
 import { LogMessageType } from "./react-components/room/ChatSidebar";
 
+//onBoard - roman
+
+// 1.) Import of the onBoard javascript files (intended as javascript classes)
+
+import stgSysClass from "./onboardxr/stage-manager/stage-system.js";
+//import loginManagerOB from "./onboardxr/hubs-docking/onboard-login-manager.js"; //mike
+
+
+//onBoard - roman end
+
 const PHOENIX_RELIABLE_NAF = "phx-reliable";
 NAF.options.firstSyncSource = PHOENIX_RELIABLE_NAF;
 NAF.options.syncSource = PHOENIX_RELIABLE_NAF;
@@ -1171,7 +1181,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       permissions: meta.permissions,
       streaming: meta.streaming,
       recording: meta.recording,
-      hand_raised: meta.hand_raised,
+      hand_raised: false, //meta.hand_raised,
       typing: meta.typing
     });
   });
@@ -1240,7 +1250,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       permissions: current.permissions,
       streaming: current.streaming,
       recording: current.recording,
-      hand_raised: current.hand_raised,
+      hand_raised: false, //current.hand_raised,
       typing: current.typing
     });
   });
@@ -1408,4 +1418,22 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   authChannel.setSocket(socket);
   linkChannel.setSocket(socket);
+
+
+  //onBoard
+console.log("Instantiating onboard stage sys!");
+
+  // 1.) Import (at begining of file)
+
+  // 2.) Instantiation of the class in a global variable allocated to the window object
+  window.stgSys = new stgSysClass(hubChannel);
+
+console.log("Initializing onboard stage sys!");
+
+  // 3.) Initialisation of the class
+  window.stgSys.init();
+
+  //  window.loginOb = new loginManagerOB(); //mike
+  //onBoardend
+  
 });

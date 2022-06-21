@@ -50,7 +50,7 @@ import { MicSetupModalContainer } from "./room/MicSetupModalContainer";
 import { InvitePopoverContainer } from "./room/InvitePopoverContainer";
 import { MoreMenuPopoverButton, CompactMoreMenuButton, MoreMenuContextProvider } from "./room/MoreMenuPopover";
 import { ChatSidebarContainer, ChatContextProvider, ChatToolbarButtonContainer } from "./room/ChatSidebarContainer";
-import { ContentMenu, PeopleMenuButton, ObjectsMenuButton } from "./room/ContentMenu";
+import { ContentMenu, ChatMenuButton, PeopleMenuButton, ObjectsMenuButton } from "./room/ContentMenu";
 import { ReactComponent as CameraIcon } from "./icons/Camera.svg";
 import { ReactComponent as AvatarIcon } from "./icons/Avatar.svg";
 import { ReactComponent as AddIcon } from "./icons/Add.svg";
@@ -94,6 +94,12 @@ import { TipContainer, FullscreenTip } from "./room/TipContainer";
 import { SpectatingLabel } from "./room/SpectatingLabel";
 import { SignInMessages } from "./auth/SignInModal";
 import { MediaDevicesEvents } from "../utils/media-devices-utils";
+
+//onboard
+// == roman
+import "../onboardxr/stage-manager/stage-system.scss";
+// == roman end
+//onboard
 
 const avatarEditorDebug = qsTruthy("avatarEditorDebug");
 
@@ -1290,10 +1296,43 @@ class UIRoot extends Component {
       }
     ];
 
+	// onboard
+	const cueUI = window.stgSys.renderCueUI();
     return (
       <MoreMenuContextProvider>
         <ReactAudioContext.Provider value={this.state.audioContext}>
           <div className={classNames(rootStyles)}>
+            <div className="topLeftMenu">
+              {entered && (
+                <>
+                  <MoreMenuPopoverButton style={{ marginLeft: "10px" }} menu={moreMenu} />
+                  <AudioPopoverContainer
+                    scene={this.props.scene}
+                    microphoneEnabled={this.mediaDevicesManager.isMicShared}
+                  />
+                  <SharePopoverContainer scene={this.props.scene} hubChannel={this.props.hubChannel} />
+                  <PlacePopoverContainer
+                    scene={this.props.scene}
+                    hubChannel={this.props.hubChannel}
+                    mediaSearchStore={this.props.mediaSearchStore}
+                    showNonHistoriedDialog={this.showNonHistoriedDialog}
+                  />
+
+
+                </>
+              )}
+              {entered &&
+                isMobileVR && (
+                  <ToolbarButton
+                    className={styleUtils.hideLg}
+                    icon={<VRIcon />}
+                    preset="accept"
+                    label={<FormattedMessage id="toolbar.enter-vr-button" defaultMessage="Enter VR" />}
+                    onClick={() => exit2DInterstitialAndEnterVR(true)}
+                  />
+                )}
+            </div>
+
             {preload &&
               this.props.hub && (
                 <PreloadOverlay
@@ -1364,7 +1403,7 @@ class UIRoot extends Component {
                 viewport={
                   <>
                     {!this.state.dialog && renderEntryFlow ? entryDialog : undefined}
-                    {!this.props.selectedObject && <CompactMoreMenuButton />}
+                    {false && !this.props.selectedObject && <CompactMoreMenuButton />}
                     {(!this.props.selectedObject ||
                       (this.props.breakpoint !== "sm" && this.props.breakpoint !== "md")) && (
                       <ContentMenu>
@@ -1378,6 +1417,10 @@ class UIRoot extends Component {
                           active={this.state.sidebarId === "people"}
                           onClick={() => this.toggleSidebar("people")}
                           presencecount={this.state.presenceCount}
+                        />
+                        <ChatMenuButton
+                          active={this.state.sidebarId === "chat"}
+                          onClick={() => this.toggleSidebar("chat")}
                         />
                       </ContentMenu>
                     )}
@@ -1615,6 +1658,7 @@ class UIRoot extends Component {
             )}
           </div>
         </ReactAudioContext.Provider>
+        {cueUI}
       </MoreMenuContextProvider>
     );
   }

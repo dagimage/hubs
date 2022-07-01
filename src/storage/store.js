@@ -24,6 +24,9 @@ const defaultMaterialQuality = (function() {
     if (qsMobileDefault && MATERIAL_QUALITY_OPTIONS.indexOf(qsMobileDefault) !== -1) {
       return qsMobileDefault;
     }
+    if (AFRAME.utils.device.isMobileVR()) {
+      return "medium";
+    }
     return "low";
   }
 
@@ -100,7 +103,7 @@ export const SCHEMA = {
         preferredMic: { type: "string", default: NO_DEVICE_ID },
         preferredSpeakers: { type: "string", default: NO_DEVICE_ID },
         preferredCamera: { type: "string", default: NO_DEVICE_ID },
-        muteMicOnEntry: { type: "bool", default: false },
+        muteMicOnEntry: { type: "bool", default: true },
         disableLeftRightPanning: { type: "bool", default: false },
         audioNormalization: { type: "bool", default: 0.0 },
         invertTouchscreenCameraMove: { type: "bool", default: true },
@@ -140,7 +143,7 @@ export const SCHEMA = {
         audioClippingThreshold: { type: "number", default: 0.015 },
         theme: { type: "string", default: "Browser Default" },
         cursorSize: { type: "number", default: 1 },
-        nametagVisibility: { type: "string", default: "showAll" },
+        nametagVisibility: { type: "string", default: "showFrozen" },
         nametagVisibilityDistance: { type: "number", default: 5 },
         avatarVoiceLevels: { type: "object" }
       }

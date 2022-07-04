@@ -260,6 +260,8 @@ import { LogMessageType } from "./react-components/room/ChatSidebar";
 import stgSysClass from "./onboardxr/stage-manager/stage-system.js";
 //import loginManagerOB from "./onboardxr/hubs-docking/onboard-login-manager.js"; //mike
 
+import "./onboardxr/avatar-follower.js";
+
 
 //onBoard - roman end
 
